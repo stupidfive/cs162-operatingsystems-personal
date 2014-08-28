@@ -8,11 +8,12 @@
 int main(int argc, char *argv[]) {
     char *cmd;
     char line[MAX_LENGTH];
+    int i = 1;
 
     printf("./shell running as PID %d under %d\n", getpid(), getppid());
 
     while(1) {
-        printf("$ ");
+        printf("%d ", i);
         if (!fgets(line, MAX_LENGTH, stdin)) {
             break;
         }
@@ -26,7 +27,8 @@ int main(int argc, char *argv[]) {
                 break;
             }
             system(line);
-            }
+        }
+        i++;
     }
 
     return 0;
