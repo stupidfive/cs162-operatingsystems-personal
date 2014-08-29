@@ -1,6 +1,19 @@
-CC=gcc
-EXECUTABLE=shell
+SRCS=shell-soln1.c io.c parse.c
+EXECUTABLES=shell
 
-shell: shell.c
+CC=gcc
+CFLAGS=-g -Wall
+LDFLAGS=
+
+OBJS=$(SRCS:.c=.o)
+
+all: $(EXECUTABLES)
+
+$(EXECUTABLES): $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) $(LDFLAGS) -o $@  
+
+.c.o:
+	$(CC) $(CFLAGS) -c $< -o $@
+
 clean:
-	rm -rf $(EXECUTABLE)
+	rm -rf $(EXECUTABLES) $(OBJS)
