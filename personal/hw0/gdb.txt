@@ -1,0 +1,9 @@
+value of infile:
+object referenced by infile:
+value of ofile:
+difference between ofile and infile (why):
+wc address:
+explain output of info stack:
+explain output of info frame:
+explain output of info registers:
+which registers hold info of recognizable elements of the program:

@@ -1,0 +1,9 @@
+file format used for this binary:
+what architecture is it compiled for:
+names of segments found:
+segment containing wc:
+address of segment?:
+segment and address containing main:
+how do they correspond with observations in gdb:
+stack segment visible?:
+heap segment visible?:
