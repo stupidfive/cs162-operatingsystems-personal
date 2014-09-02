@@ -33,13 +33,13 @@ int main (int argc, char *argv[]) {
     FILE *infile;
     printf("argc: %d", argc);
     switch (argc) {
-    case 1:
+    case 2:
         printf("Case 1: %d, %s", argc, argv[0]);
         infile = fopen(argv[1], "r");
         wc(ofile, infile, argv[1]);
         fclose(infile);
         break;
-    case 2:
+    case 3:
         infile = fopen(argv[1], "r");
         ofile = fopen(argv[2], "w");
         wc(ofile, infile, argv[1]);
