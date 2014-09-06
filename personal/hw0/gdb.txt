@@ -1,8 +1,8 @@
-value of infile:
-object referenced by infile:
-value of ofile:
-difference between ofile and infile (why):
-wc address:
+value of infile: infile is a pointer to the file to read from. This can be stdin or a file on the file system.
+object referenced by infile: A file to read from. This can be stdin or a file on the file system.
+value of ofile: ofile is a pointer to a file to write output to. This can be stdout or a file on the file system.
+difference between ofile and infile (why): ofile and infile are different because the files are different, so the pointers to the files would also be different.
+wc address: 
 explain output of info stack:
 explain output of info frame:
 explain output of info registers:

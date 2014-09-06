@@ -1,4 +1,4 @@
-file format used for this binary:
+file format used for this binary: 
 what architecture is it compiled for:
 names of segments found:
 segment containing wc:
