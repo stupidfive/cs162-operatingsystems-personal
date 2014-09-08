@@ -7,7 +7,7 @@ wc: wc.c
 	gcc -g wc.c -o wc
 
 map: map.c
-	gc -g map.c -o map
+	gcc -g map.c -o map
 
 check: check_wc check_main
 
