@@ -1,9 +1,9 @@
-file format used for this binary: 
-what architecture is it compiled for:
-names of segments found:
-segment containing wc:
-address of segment?:
-segment and address containing main:
-how do they correspond with observations in gdb:
-stack segment visible?:
-heap segment visible?:
+file format used for this binary: elf64-x86-64
+what architecture is it compiled for: i386:x86-64
+names of segments found: .interp, .note.ABI-tag, .note.gnu.build-id, .gnu.hash,  .dynsym,  .dynstr,  .gnu.version,  .gnu.version_r,  .rela.dyn,  .rela.plt,  .init,  .plt,  .text,  .fini,  .rodata,  .eh_frame_hdr,  .eh_frame,  .init_array,  .fini_array,  .jcr,  .dynamic,  .got,  .got.plt, .data, .bss
+segment containing wc: .text
+address of wc?: 0000000000400826
+segment and address containing main: .text, the address is 00000000004009ce
+how do they correspond with observations in gdb: 
+stack segment visible?: Yes, the stack is visible but it is null, which makes sense because stack data is added on during runtime.
+heap segment visible?: No, there is no heap visible because space must be allocated during runtime.

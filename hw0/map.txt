@@ -1,0 +1,11 @@
+Pointers visible in executable:
+    main: .text
+    recur: .text
+Direction of stack growth: The stack grows upward, toward a larger memory address.
+size of stack frame call of recur:
+Where is the heap:
+Direction of heap growth:
+allocated objects contiguous?:
+map of address space:
+
+

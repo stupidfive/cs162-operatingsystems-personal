@@ -1,0 +1,206 @@
+
+wc:     file format elf64-x86-64
+wc
+architecture: i386:x86-64, flags 0x00000112:
+EXEC_P, HAS_SYMS, D_PAGED
+start address 0x0000000000400730
+
+Program Header:
+    PHDR off    0x0000000000000040 vaddr 0x0000000000400040 paddr 0x0000000000400040 align 2**3
+         filesz 0x00000000000001c0 memsz 0x00000000000001c0 flags r-x
+  INTERP off    0x0000000000000200 vaddr 0x0000000000400200 paddr 0x0000000000400200 align 2**0
+         filesz 0x000000000000001c memsz 0x000000000000001c flags r--
+    LOAD off    0x0000000000000000 vaddr 0x0000000000400000 paddr 0x0000000000400000 align 2**21
+         filesz 0x0000000000000d4c memsz 0x0000000000000d4c flags r-x
+    LOAD off    0x0000000000000d50 vaddr 0x0000000000600d50 paddr 0x0000000000600d50 align 2**21
+         filesz 0x0000000000000278 memsz 0x00000000000002a0 flags rw-
+ DYNAMIC off    0x0000000000000d68 vaddr 0x0000000000600d68 paddr 0x0000000000600d68 align 2**3
+         filesz 0x00000000000001d0 memsz 0x00000000000001d0 flags rw-
+    NOTE off    0x000000000000021c vaddr 0x000000000040021c paddr 0x000000000040021c align 2**2
+         filesz 0x0000000000000044 memsz 0x0000000000000044 flags r--
+EH_FRAME off    0x0000000000000bcc vaddr 0x0000000000400bcc paddr 0x0000000000400bcc align 2**2
+         filesz 0x0000000000000044 memsz 0x0000000000000044 flags r--
+   STACK off    0x0000000000000000 vaddr 0x0000000000000000 paddr 0x0000000000000000 align 2**4
+         filesz 0x0000000000000000 memsz 0x0000000000000000 flags rw-
+
+Dynamic Section:
+  NEEDED               libc.so.6
+  INIT                 0x0000000000400638
+  FINI                 0x0000000000400ba4
+  INIT_ARRAY           0x0000000000600d50
+  INIT_ARRAYSZ         0x0000000000000008
+  FINI_ARRAY           0x0000000000600d58
+  FINI_ARRAYSZ         0x0000000000000008
+  GNU_HASH             0x0000000000400260
+  STRTAB               0x00000000004003f0
+  SYMTAB               0x0000000000400288
+  STRSZ                0x0000000000000092
+  SYMENT               0x0000000000000018
+  DEBUG                0x0000000000000000
+  PLTGOT               0x0000000000600f40
+  PLTRELSZ             0x0000000000000120
+  PLTREL               0x0000000000000007
+  JMPREL               0x0000000000400518
+  RELA                 0x00000000004004d0
+  RELASZ               0x0000000000000048
+  RELAENT              0x0000000000000018
+  VERNEED              0x00000000004004a0
+  VERNEEDNUM           0x0000000000000001
+  VERSYM               0x0000000000400482
+
+Version References:
+  required from libc.so.6:
+    0x0d696913 0x00 03 GLIBC_2.3
+    0x09691a75 0x00 02 GLIBC_2.2.5
+
+Sections:
+Idx Name          Size      VMA               LMA               File off  Algn
+  0 .interp       0000001c  0000000000400200  0000000000400200  00000200  2**0
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  1 .note.ABI-tag 00000020  000000000040021c  000000000040021c  0000021c  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  2 .note.gnu.build-id 00000024  000000000040023c  000000000040023c  0000023c  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  3 .gnu.hash     00000028  0000000000400260  0000000000400260  00000260  2**3
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  4 .dynsym       00000168  0000000000400288  0000000000400288  00000288  2**3
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  5 .dynstr       00000092  00000000004003f0  00000000004003f0  000003f0  2**0
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  6 .gnu.version  0000001e  0000000000400482  0000000000400482  00000482  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  7 .gnu.version_r 00000030  00000000004004a0  00000000004004a0  000004a0  2**3
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  8 .rela.dyn     00000048  00000000004004d0  00000000004004d0  000004d0  2**3
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  9 .rela.plt     00000120  0000000000400518  0000000000400518  00000518  2**3
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+ 10 .init         0000001a  0000000000400638  0000000000400638  00000638  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+ 11 .plt          000000d0  0000000000400660  0000000000400660  00000660  2**4
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+ 12 .text         00000472  0000000000400730  0000000000400730  00000730  2**4
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+ 13 .fini         00000009  0000000000400ba4  0000000000400ba4  00000ba4  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+ 14 .rodata       0000001b  0000000000400bb0  0000000000400bb0  00000bb0  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+ 15 .eh_frame_hdr 00000044  0000000000400bcc  0000000000400bcc  00000bcc  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+ 16 .eh_frame     0000013c  0000000000400c10  0000000000400c10  00000c10  2**3
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+ 17 .init_array   00000008  0000000000600d50  0000000000600d50  00000d50  2**3
+                  CONTENTS, ALLOC, LOAD, DATA
+ 18 .fini_array   00000008  0000000000600d58  0000000000600d58  00000d58  2**3
+                  CONTENTS, ALLOC, LOAD, DATA
+ 19 .jcr          00000008  0000000000600d60  0000000000600d60  00000d60  2**3
+                  CONTENTS, ALLOC, LOAD, DATA
+ 20 .dynamic      000001d0  0000000000600d68  0000000000600d68  00000d68  2**3
+                  CONTENTS, ALLOC, LOAD, DATA
+ 21 .got          00000008  0000000000600f38  0000000000600f38  00000f38  2**3
+                  CONTENTS, ALLOC, LOAD, DATA
+ 22 .got.plt      00000078  0000000000600f40  0000000000600f40  00000f40  2**3
+                  CONTENTS, ALLOC, LOAD, DATA
+ 23 .data         00000010  0000000000600fb8  0000000000600fb8  00000fb8  2**3
+                  CONTENTS, ALLOC, LOAD, DATA
+ 24 .bss          00000020  0000000000600fd0  0000000000600fd0  00000fc8  2**4
+                  ALLOC
+ 25 .comment      00000038  0000000000000000  0000000000000000  00000fc8  2**0
+                  CONTENTS, READONLY
+ 26 .debug_aranges 00000030  0000000000000000  0000000000000000  00001000  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 27 .debug_info   00000490  0000000000000000  0000000000000000  00001030  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 28 .debug_abbrev 0000014f  0000000000000000  0000000000000000  000014c0  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 29 .debug_line   00000119  0000000000000000  0000000000000000  0000160f  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 30 .debug_str    00000313  0000000000000000  0000000000000000  00001728  2**0
+                  CONTENTS, READONLY, DEBUGGING
+SYMBOL TABLE:
+0000000000400200 l    d  .interp	0000000000000000              .interp
+000000000040021c l    d  .note.ABI-tag	0000000000000000              .note.ABI-tag
+000000000040023c l    d  .note.gnu.build-id	0000000000000000              .note.gnu.build-id
+0000000000400260 l    d  .gnu.hash	0000000000000000              .gnu.hash
+0000000000400288 l    d  .dynsym	0000000000000000              .dynsym
+00000000004003f0 l    d  .dynstr	0000000000000000              .dynstr
+0000000000400482 l    d  .gnu.version	0000000000000000              .gnu.version
+00000000004004a0 l    d  .gnu.version_r	0000000000000000              .gnu.version_r
+00000000004004d0 l    d  .rela.dyn	0000000000000000              .rela.dyn
+0000000000400518 l    d  .rela.plt	0000000000000000              .rela.plt
+0000000000400638 l    d  .init	0000000000000000              .init
+0000000000400660 l    d  .plt	0000000000000000              .plt
+0000000000400730 l    d  .text	0000000000000000              .text
+0000000000400ba4 l    d  .fini	0000000000000000              .fini
+0000000000400bb0 l    d  .rodata	0000000000000000              .rodata
+0000000000400bcc l    d  .eh_frame_hdr	0000000000000000              .eh_frame_hdr
+0000000000400c10 l    d  .eh_frame	0000000000000000              .eh_frame
+0000000000600d50 l    d  .init_array	0000000000000000              .init_array
+0000000000600d58 l    d  .fini_array	0000000000000000              .fini_array
+0000000000600d60 l    d  .jcr	0000000000000000              .jcr
+0000000000600d68 l    d  .dynamic	0000000000000000              .dynamic
+0000000000600f38 l    d  .got	0000000000000000              .got
+0000000000600f40 l    d  .got.plt	0000000000000000              .got.plt
+0000000000600fb8 l    d  .data	0000000000000000              .data
+0000000000600fd0 l    d  .bss	0000000000000000              .bss
+0000000000000000 l    d  .comment	0000000000000000              .comment
+0000000000000000 l    d  .debug_aranges	0000000000000000              .debug_aranges
+0000000000000000 l    d  .debug_info	0000000000000000              .debug_info
+0000000000000000 l    d  .debug_abbrev	0000000000000000              .debug_abbrev
+0000000000000000 l    d  .debug_line	0000000000000000              .debug_line
+0000000000000000 l    d  .debug_str	0000000000000000              .debug_str
+0000000000000000 l    df *ABS*	0000000000000000              init.c
+0000000000000000 l    df *ABS*	0000000000000000              
+0000000000000000 l    df *ABS*	0000000000000000              crtstuff.c
+0000000000600d60 l     O .jcr	0000000000000000              __JCR_LIST__
+0000000000400760 l     F .text	0000000000000000              deregister_tm_clones
+00000000004007a0 l     F .text	0000000000000000              register_tm_clones
+00000000004007e0 l     F .text	0000000000000000              __do_global_dtors_aux
+0000000000600fe8 l     O .bss	0000000000000001              completed.6617
+0000000000600d58 l     O .fini_array	0000000000000000              __do_global_dtors_aux_fini_array_entry
+0000000000400800 l     F .text	0000000000000000              frame_dummy
+0000000000600d50 l     O .init_array	0000000000000000              __frame_dummy_init_array_entry
+0000000000000000 l    df *ABS*	0000000000000000              wc.c
+0000000000000000 l    df *ABS*	0000000000000000              crtstuff.c
+0000000000400d48 l     O .eh_frame	0000000000000000              __FRAME_END__
+0000000000600d60 l     O .jcr	0000000000000000              __JCR_END__
+0000000000000000 l    df *ABS*	0000000000000000              
+0000000000600d58 l       .init_array	0000000000000000              __init_array_end
+0000000000600d68 l     O .dynamic	0000000000000000              _DYNAMIC
+0000000000600d50 l       .init_array	0000000000000000              __init_array_start
+0000000000600f40 l     O .got.plt	0000000000000000              _GLOBAL_OFFSET_TABLE_
+0000000000400ba0 g     F .text	0000000000000002              __libc_csu_fini
+0000000000000000  w      *UND*	0000000000000000              _ITM_deregisterTMCloneTable
+0000000000600fd0 g     O .bss	0000000000000008              stdout@@GLIBC_2.2.5
+0000000000600fb8  w      .data	0000000000000000              data_start
+0000000000600fe0 g     O .bss	0000000000000008              stdin@@GLIBC_2.2.5
+0000000000600fc8 g       .data	0000000000000000              _edata
+0000000000000000       F *UND*	0000000000000000              fclose@@GLIBC_2.2.5
+0000000000400ba4 g     F .fini	0000000000000000              _fini
+0000000000000000       F *UND*	0000000000000000              strlen@@GLIBC_2.2.5
+0000000000000000       F *UND*	0000000000000000              printf@@GLIBC_2.2.5
+0000000000000000       F *UND*	0000000000000000              fputs@@GLIBC_2.2.5
+0000000000400994 g     F .text	000000000000003a              count_digits
+0000000000000000       F *UND*	0000000000000000              fgetc@@GLIBC_2.2.5
+0000000000400826 g     F .text	000000000000016e              wc
+0000000000000000       F *UND*	0000000000000000              fputc@@GLIBC_2.2.5
+0000000000000000       F *UND*	0000000000000000              __libc_start_main@@GLIBC_2.2.5
+0000000000600fb8 g       .data	0000000000000000              __data_start
+0000000000000000  w      *UND*	0000000000000000              __gmon_start__
+0000000000600fc0 g     O .data	0000000000000000              .hidden __dso_handle
+0000000000400bb0 g     O .rodata	0000000000000004              _IO_stdin_used
+0000000000400b30 g     F .text	0000000000000065              __libc_csu_init
+0000000000000000       F *UND*	0000000000000000              malloc@@GLIBC_2.2.5
+0000000000600ff0 g       .bss	0000000000000000              _end
+0000000000400730 g     F .text	0000000000000000              _start
+0000000000600fc8 g       .bss	0000000000000000              __bss_start
+00000000004009ce g     F .text	0000000000000161              main
+0000000000000000       F *UND*	0000000000000000              fopen@@GLIBC_2.2.5
+0000000000000000  w      *UND*	0000000000000000              _Jv_RegisterClasses
+0000000000000000       F *UND*	0000000000000000              sprintf@@GLIBC_2.2.5
+0000000000600fc8 g     O .data	0000000000000000              .hidden __TMC_END__
+0000000000000000  w      *UND*	0000000000000000              _ITM_registerTMCloneTable
+0000000000400638 g     F .init	0000000000000000              _init
+0000000000000000       F *UND*	0000000000000000              __ctype_b_loc@@GLIBC_2.3
+
+
