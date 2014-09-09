@@ -1,9 +1,9 @@
-value of infile: infile is a pointer to the file to read from. This can be stdin or a file on the file system.
-object referenced by infile: A file to read from. This can be stdin or a file on the file system.
-value of ofile: ofile is a pointer to a file to write output to. This can be stdout or a file on the file system.
-difference between ofile and infile (why): ofile and infile are different because the files are different, so the pointers to the files would also be different.
-wc address: 
-explain output of info stack:
-explain output of info frame:
-explain output of info registers:
-which registers hold info of recognizable elements of the program:
+value of infile: 0x7fffffffe810 
+object referenced by infile: a file stream for the file pointed to by infile.
+value of ofile: 0x0. This will later become 0x7ffff7dd77c0 <_IO_2_1_stdout_>
+difference between ofile and infile (why): ofile and infile are different because the files are different, so the pointers to the files would also be different. ofile is also null until stdout is set.
+wc address: 0x400826
+explain output of info stack: it shows the contents of the stack.
+explain output of info frame: it shows the contents of the current frame.
+explain output of info registers: it shows the conents of all the registers.
+which registers hold info of recognizable elements of the program: rdi = ofile pointer, rsi = infile pointer, rdx = inname pointer, rbp = locals

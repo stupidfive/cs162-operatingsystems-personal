@@ -12,10 +12,12 @@ map: map.c
 check: check_wc check_main
 
 check_wc:
-	./wc | grep 1
+	./check_wc.sh
 
 check_main:
-	./main | grep 1
+	if ./main | grep stack | grep "$(ulimit -s)"; then echo "stack correct"; else echo "stack incorrect"; fi
+	if ./main | grep process | grep "$(ulimit -u)"; then echo "processes correct"; else echo "processes incorrect"; fi
+	if ./main | grep descriptors | grep "$(ulimit -n)"; then echo "file descriptors correct"; else echo "file descriptors incorrect"; fi
 
 clean:
 	rm wc main map

@@ -1,11 +1,12 @@
 Pointers visible in executable:
     main: .text
     recur: .text
-Direction of stack growth: The stack grows upward, toward a larger memory address.
-size of stack frame call of recur:
-Where is the heap:
-Direction of heap growth:
-allocated objects contiguous?:
+Direction of stack growth: The stack grows downward, toward a smaller memory address.
+size of stack frame call of recur: 0x30B
+Where is the heap: The heap is at 1417010
+Direction of heap growth: The heap grows updward, toward a larger memory address
+allocated objects contiguous?: Yes, because the stack and heap grow separately.
 map of address space:
 
+| 0x40058b   CODE   0x400546 | 0x600ae8   DATA   0x1417010 | 0x1417010   HEAP   0x1417080 |--> FREE SPACE <--| 0x7fff772fea6c   STACK  0x7fff772feafc |
 

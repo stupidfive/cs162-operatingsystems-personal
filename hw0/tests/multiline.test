@@ -1,0 +1,1 @@
+./wc ./multiline.in | grep "6 6 29 multiline.in"

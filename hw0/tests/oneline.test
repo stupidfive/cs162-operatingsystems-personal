@@ -1,0 +1,1 @@
+./wc ./oneline.in | grep "1 4 17 oneline.in"
