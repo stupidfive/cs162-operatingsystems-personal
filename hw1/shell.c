@@ -17,6 +17,14 @@ int cmd_quit(tok_t arg[]) {
   return 1;
 }
 
+int cmd_cd(tok_t arg[]) {
+  if (arg[0] == NULL) {
+    chdir(getenv("HOME"));
+  } else {
+    chdir(arg[0]);
+  }
+}
+
 int cmd_help(tok_t arg[]);
 
 /* Command Lookup table */
@@ -29,7 +37,8 @@ typedef struct fun_desc {
 
 fun_desc_t cmd_table[] = {
   {cmd_help, "?", "show this help menu"},
-  {cmd_quit, "quit", "quit the command shell"}
+  {cmd_quit, "quit", "quit the command shell"},
+  {cmd_cd, "cd", "change directories"}
 };
 
 int cmd_help(tok_t arg[]) {
@@ -59,7 +68,9 @@ int shell (int argc, char *argv[]) {
   printf("%s running as PID %d under %d\n",argv[0],pid,ppid);
 
   lineNum=0;
-  fprintf(stdout,"%d: ",lineNum);
+  char *cwd = malloc(4096);
+  getcwd(cwd, 4096);
+  fprintf(stdout,"%d %s: ",lineNum, cwd);
   while ((s = freadln(stdin))) {
     t = getToks(s);		/* Break the line into tokens */
     fundex = lookup(t[0]);	/* Is first token a shell literal */
@@ -67,7 +78,8 @@ int shell (int argc, char *argv[]) {
     else {			/* Treat it as a file to exec */
       fprintf(stdout,"This shell currently supports only built-ins.  Replace this to run programs as commands.\n");
     }
-    fprintf(stdout,"%d: ",++lineNum);
+    getcwd(cwd, 4096);
+    fprintf(stdout,"%d %s: ",++lineNum, cwd);
   }
   return 0;
 }
