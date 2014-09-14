@@ -12,17 +12,18 @@
 
 #define TOKseparator " \n"
 
-tok_t *getToks(char *line) {
+tok_t *getToks(char *line, char *separator) {
   int i;
   char *c;
-
+  char *linecpy = malloc(strlen(line));
+  strcpy(linecpy, line);
   tok_t *toks = malloc(MAXTOKS*sizeof(tok_t)); /* allocate return object */
   for (i=0; i<MAXTOKS; i++) toks[i] = NULL;     /* empty token array */
 
-  c = strtok(line,TOKseparator);	 /* Start tokenizer on line */
+  c = strtok(linecpy,separator);	 /* Start tokenizer on line */
   for (i=0; c && (i < MAXTOKS); i++) {
     toks[i] = c;
-    c = strtok(NULL,TOKseparator);	/* scan for next token */
+    c = strtok(NULL,separator);	/* scan for next token */
   }
   return toks;
 }

@@ -31,7 +31,7 @@
 
 typedef char *tok_t;
 
-tok_t *getToks(char *line);
+tok_t *getToks(char *line, char *separator);
 void freeToks(tok_t *toks);
 
 #endif
