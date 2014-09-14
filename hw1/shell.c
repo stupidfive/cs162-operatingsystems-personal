@@ -79,7 +79,8 @@ int shell (int argc, char *argv[]) {
         if (fundex >= 0) cmd_table[fundex].fun(&t[1]);
         else {			/* Treat it as a file to exec */
             int pid;
-            if (t[0][0] == "/") {
+            //if (t[0][0] == "/") {
+            if (strstr(t[0], "/") == t[0] || strstr(t[0], "./") == t[0] || strstr(t[0], "../") == t[0]) {
                 pid = fork();
                 if (pid == 0) {
                     int execexit = execv(t[0], t);
