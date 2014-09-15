@@ -24,6 +24,9 @@ int cmd_cd(tok_t arg[]) {
         chdir(arg[0]);
     }
 }
+int cmd_wait(tok_t arg[]) {
+    while (wait() != -1);
+}
 
 int cmd_help(tok_t arg[]);
 
@@ -38,7 +41,8 @@ typedef struct fun_desc {
 fun_desc_t cmd_table[] = {
     {cmd_help, "?", "show this help menu"},
     {cmd_quit, "quit", "quit the command shell"},
-    {cmd_cd, "cd", "change directories"}
+    {cmd_cd, "cd", "change directories"},
+    {cmd_wait, "wait", "wait for all background processes to finish"}
 };
 
 int cmd_help(tok_t arg[]) {
@@ -74,39 +78,34 @@ int shell (int argc, char *argv[]) {
     getcwd(cwd, 4096);
     fprintf(stdout,"%d %s: ",lineNum, cwd);
     while ((s = freadln(stdin))) {
+        char *and = strstr(s, "&");
+        if (and) *and = 0;
         t = getToks(s, " \n");		/* Break the line into tokens */
         fundex = lookup(t[0]);	/* Is first token a shell literal */
         if (fundex >= 0) cmd_table[fundex].fun(&t[1]);
         else {			/* Treat it as a file to exec */
             int pid;
-            //if (t[0][0] == "/") {
             if (strstr(t[0], "/") == t[0] || strstr(t[0], "./") == t[0] || strstr(t[0], "../") == t[0]) {
                 pid = fork();
                 if (pid == 0) {
                     int execexit = execv(t[0], t);
-                } else {
+                } else if (!and) {
                     wait(pid);
                 }
             } else {
                 path = getenv("PATH");
                 tok_t *path_strings;
-                //printf("path=%s\n", path);
                 path_strings = getToks(path, ":");
                 int i = 0;
-                //printf("path=%s\n", path);
-                //char *t0 = t[0];
                 while (path_strings[i] != NULL) {
                     strcat(cur_path, path_strings[i]);
                     strcat(cur_path, "/");
                     strcat(cur_path, t[0]);
-                    //t[0] = cur_path;
-                    //printf("cur_path=%s\n", cur_path);
                     if (access(cur_path, X_OK) != -1) {
                         pid = fork();
                         if (pid == 0) {
-                            //printf("cur_path = %s\n", cur_path);
                             int execexit = execv(cur_path, t);
-                        } else {
+                        } else if (!and) {
                             wait(pid);
                         }
                         path_strings[i + 1] = NULL;
@@ -114,11 +113,10 @@ int shell (int argc, char *argv[]) {
                     i++;
                     cur_path[0] = 0;
                 }
-                //path[0] = 0;
             }
-            getcwd(cwd, 4096);
-            fprintf(stdout,"%d %s: ",++lineNum, cwd);
         }
+        getcwd(cwd, 4096);
+        fprintf(stdout,"%d %s: ",++lineNum, cwd);
     }
     free(cwd);
     return 0;
