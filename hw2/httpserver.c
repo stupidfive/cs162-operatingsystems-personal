@@ -21,8 +21,6 @@ void error(char *msg)
     exit(1);
 }
 
-typedef enum { false, true } bool;
-
 const char htmlheader[]="HTTP/1.0 200 OK\r\n"
   "Content-Type: text/html\r\n"
   "\r\n";
