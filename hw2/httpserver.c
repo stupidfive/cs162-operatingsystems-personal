@@ -23,96 +23,13 @@ void error(char *msg)
 
 typedef enum { false, true } bool;
 
-const char htmlheader[]="HTTP/1.1 200 OK\r\n"
+const char htmlheader[]="HTTP/1.0 200 OK\r\n"
   "Content-Type: text/html\r\n"
   "\r\n";
 
-const char textheader[]="HTTP/1.1 200 OK\r\n"
+const char textheader[]="HTTP/1.0 200 OK\r\n"
   "Content-Type: text/plain\r\n"
   "\r\n";
-
-const char error400[]=
-  "HTTP/1.1 400 Bad Request\r\n\r\n"
-  "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\">\r\n"
-  "<html>\r\n"
-  "<head>\r\n"
-  "   <title>400 Bad Request</title>\r\n"
-  "</head>\r\n"
-  "<body>\r\n"
-  "   <h1>Bad Request</h1>\r\n"
-  "   <p>The request was bad</p>\r\n"
-  "</body>\r\n"
-  "</html>\r\n";
-
-const char error403[]=
-  "HTTP/1.1 403 Unauthorized\r\n\r\n"
-  "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\">\r\n"
-  "<html>\r\n"
-  "<head>\r\n"
-  "   <title>403 Unauthorized </title>\r\n"
-  "</head>\r\n"
-  "<body>\r\n"
-  "   <h1>Forbidden</h1>\r\n"
-  "   <p>You don't have permission to access this directory on this server</p>\r\n"
-  "</body>\r\n"
-  "</html>\r\n";
-
-const char error404[]=
-  "HTTP/1.1 404 Not Found\r\n\r\n"
-  "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\">\r\n"
-  "<html>\r\n"
-  "<head>\r\n"
-  "   <title>404 Not Found</title>\r\n"
-  "</head>\r\n"
-  "<body>\r\n"
-  "   <h1>Not Found</h1>\r\n"
-  "   <p>The requested URL /t.html was not found on this server.</p>\r\n"
-  "</body>\r\n"
-  "</html>\r\n";
-
-typedef struct dirlisting { 
-    char name[MAXPATH]; // filename
-    bool isdir; // true if it is a directory , else it is a file
-} dirlisting_t;
-
-// Takes as parameters a directory name, list of files in the directory, and the number of files
-// Returns a pointer to a formatted webpage
-char* format_directory_listing( char *dirname, dirlisting_t *directory, int numfiles) {
-    /* dirname : name of directory
-     * directory : list of files in the directory
-     * numfiles : number of files
-     */
-
-    char *webpage = malloc(MAXBUF * sizeof(char));
-    webpage[0] = '\0';
-    strcat(webpage, htmlheader);
-    strcat(webpage, "<html>\r\n");
-    strcat(webpage, "<head>\r\n");
-    strcat(webpage, "<title>Index of ");
-    strcat(webpage, dirname);
-    strcat(webpage, " </title>\r\n");
-    strcat(webpage, "</head>\r\n");
-    strcat(webpage, "<body>\r\n");
-    strcat(webpage, "<h1>\r\n");
-    strcat(webpage, "Index of ");
-    strcat(webpage, dirname);
-    strcat(webpage, "</h1>\r\n");
-    strcat(webpage, "<table> \r\n <tr> \r\n <th style='width:300px'> Name </th> <th style='width:300px'> Type \r\n </tr> \r\n");
-    
-    int i = 0;
-    for(i=0; i<numfiles; i++) {
-        strcat(webpage, "<tr> \r\n <td> ");
-        strcat(webpage, directory[i].name);
-        strcat(webpage, "</td>  <td>");
-        
-        if (directory[i].isdir == false ) strcat( webpage, "REGULAR FILE");
-        else strcat (webpage, "DIRECTORY");
-
-        strcat(webpage, "</td> \r\n </tr> \r\n");
-    } 
-  strcat(webpage, "</table> \r\n </body> \r\n </html>\r\n \r\n");
-  return webpage;
-}
 
 int process_http_request(int httpsockfd)
 {
@@ -127,6 +44,9 @@ int process_http_request(int httpsockfd)
 
      Service the GET command.  
        - All other requests should receive a valid error 400 response.
+       Use the 400.html page in the hw2 directory for the message body, 
+       and search up the proper formatting of the 404 Bad Request error
+       in the RFC HTTP protocol.
        - A GET specifies a resource as the second token, followed by
        the http version.
 
@@ -136,14 +56,10 @@ int process_http_request(int httpsockfd)
      relative to that directory.
      - If the resource specifies a file, the file is returned to the
      client with an appropriate Content-Type in the response header.
-     - If the resource specifies a directory and the directory contains
-     a file named index.html, that file should be returned.
-     - If no index.html is present, a html directory listing is returned
-     - Paths must resolve to resources within the tree below files, i.e.,
-     they cannot use .., ~, or / to reach to files outside.  Such 
-     attempts should receive an error 404.
-     - If the path does not resolve to a file with read access for
-     'other' an error 404 is returned.
+    - If the path does not resolve to a file with read access for
+     'other' an error 404 is returned. Use the 404.html page in the
+     hw2 directory for the message body, and search up the proper formatting
+     of the 404 Not Found error in the RFC HTTP protocol.
  */
   memset(reqbuf,0, MAXREQ);
   n = read(httpsockfd,reqbuf,MAXREQ-1);
