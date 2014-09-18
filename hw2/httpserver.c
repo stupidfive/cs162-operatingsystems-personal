@@ -44,9 +44,6 @@ int process_http_request(int httpsockfd)
 
      Service the GET command.  
        - All other requests should receive a valid error 400 response.
-       Use the 400.html page in the hw2 directory for the message body, 
-       and search up the proper formatting of the 404 Bad Request error
-       in the RFC HTTP protocol.
        - A GET specifies a resource as the second token, followed by
        the http version.
 
@@ -55,11 +52,8 @@ int process_http_request(int httpsockfd)
      - Resources specified in the GET should be treated as a pathname 
      relative to that directory.
      - If the resource specifies a file, the file is returned to the
-     client with an appropriate Content-Type in the response header.
-    - If the path does not resolve to a file with read access for
-     'other' an error 404 is returned. Use the 404.html page in the
-     hw2 directory for the message body, and search up the proper formatting
-     of the 404 Not Found error in the RFC HTTP protocol.
+     client with  Content-Type set to text/html in the response header.
+    - If the path does not resolve to a file an error 404 is returned.
  */
   memset(reqbuf,0, MAXREQ);
   n = read(httpsockfd,reqbuf,MAXREQ-1);
