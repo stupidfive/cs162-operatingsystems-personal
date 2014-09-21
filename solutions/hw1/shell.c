@@ -103,7 +103,9 @@ int shell (int argc, char *argv[]) {
     else {			/* Treat it as a file to exec */
       for (token = t; *token != NULL; token++) {
         pos = strchr(token[0], '&');
-        if (pos) {
+        if (pos == token[0]) {
+          *(token) = NULL;
+        } else if (pos) {
           *pos = '\0';
           is_background = 1;
         }
