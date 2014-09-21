@@ -90,7 +90,7 @@ int shell (int argc, char *argv[]) {
   int cstatus, cerr;
   int is_background;
   tok_t *token;
-  char *character;
+  char *pos;
 
   printf("%s running as PID %d under %d\n",argv[0],pid,ppid);
   lineNum=0;
@@ -102,15 +102,10 @@ int shell (int argc, char *argv[]) {
     if (fundex >= 0) cmd_table[fundex].fun(&t[1]);
     else {			/* Treat it as a file to exec */
       for (token = t; *token != NULL; token++) {
-        for (character = token[0]; *character; character++) {
-          if (*character == '&') {
-            if (character == token[0]) {
-              *token = '\0';
-            } else {
-              *character = '\0';
-            }
-            is_background = 1;
-          }
+        pos = strchr(token[0], '&');
+        if (pos) {
+          *pos = '\0';
+          is_background = 1;
         }
       }
       char cmd[MAXPROMPT];
@@ -133,15 +128,15 @@ int shell (int argc, char *argv[]) {
       strcat(cmd, t[0]);
       cpid = fork();		/* fork a child */
       if (cpid == 0) {		/* child process */
-	      cerr = execv(cmd, t);		/* exec the file within child process */
-	      printf("Child: %s exited with error %d\n",t[0],errno);
-	      _exit(EXIT_FAILURE);	/* terminate child normally */
+        cerr = execv(cmd, t);		/* exec the file within child process */
+        printf("Child: %s exited with error %d\n",t[0],errno);
+        _exit(EXIT_FAILURE);	/* terminate child normally */
       } else if (cpid > 0) {			/* parent process */
         if (!is_background) {
           tcpid = wait(&cstatus);
         }
       } else {			/* fork failed */
-	      printf("Fork of child process failed\n");
+        printf("Fork of child process failed\n");
       }
     }
     prompt(++lineNum);
