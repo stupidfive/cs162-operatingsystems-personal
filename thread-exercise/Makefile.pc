@@ -1,0 +1,17 @@
+CC=gcc
+CFLAGS=-c -Wall -pthread
+LDFLAGS=
+SOURCES=procon.c so.c
+OBJECTS=$(SOURCES:.cpp=.o)
+EXECUTABLE=procon
+
+all: $(SOURCES) $(EXECUTABLE)
+	
+$(EXECUTABLE): $(OBJECTS)
+	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
+
+.cpp.o:
+	$(CC) $(CFLAGS) $< -o $@
+
+clean:
+	rm $(EXECUTABLES) *.*~
