@@ -1,0 +1,5 @@
+the subdirectories in this folder contain example code, as well as possible output of that code.
+
+please take a look at the code, predict the output, and check your work with that of the possible-output file within that directory.
+
+you do not have to turn in anything for this part of the assignment.
