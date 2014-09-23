@@ -1,0 +1,15 @@
+➜  ex7  ./a.out
+Worker 1 started
+Worker 2 started
+Worker 3 started
+Worker 4 started
+➜  ex7  ./a.out
+Worker 2 started
+Worker 1 started
+Worker 3 started
+Worker 4 started
+➜  ex7  ./a.out
+Worker 2 started
+Worker 3 started
+Worker 4 started
+Worker 1 started

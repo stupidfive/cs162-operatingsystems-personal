@@ -1,0 +1,5 @@
+➜  ex6  ./a.out
+Worker 0 started
+Worker 1 started
+Worker 2 started
+Worker 3 started
