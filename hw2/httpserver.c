@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/types.h> 
+#include <ctype.h>
  
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -29,8 +30,17 @@ const char textheader[]="HTTP/1.0 200 OK\r\n"
   "Content-Type: text/plain\r\n"
   "\r\n";
 
+const char header404[]="HTTP/1.0 404 Not Found\r\n"
+  "Content-Type: text/html\r\n"
+  "\r\n";
+
+const char header400[]="HTTP/1.0 400 Bad Request\r\n"
+  "Content-Type: text/html\r\n"
+  "\r\n";
+
 int process_http_request(int httpsockfd)
 {
+	printf("process_http_request\n");
   char reqbuf[MAXREQ];
   int n=0;
   /* IMPLEMENT ME!
@@ -55,10 +65,42 @@ int process_http_request(int httpsockfd)
  */
   memset(reqbuf,0, MAXREQ);
   n = read(httpsockfd,reqbuf,MAXREQ-1);
-  write(httpsockfd,textheader,strlen(textheader));
-  write(httpsockfd,"You said:\n",10);
-  write(STDOUT_FILENO, reqbuf, n );
-  write(httpsockfd, reqbuf, n );
+  char * p;
+	p = strtok(reqbuf, " ");
+	char *path;
+	char *c = (char *) malloc(sizeof(char));;
+	FILE *file;
+	int comp = 1;
+	comp = strcmp(p, "GET");
+	if (!comp) { //is this a GET request
+		p = strtok(NULL, " ");
+		path = (char *) malloc(strlen(p) + 3);
+		sprintf(path, "%s%s", "www", p);
+		file = fopen(path, "r");
+		if (file) { //file exists
+			write(httpsockfd, htmlheader, strlen(htmlheader));
+		} else { //file doesn't exist
+			fclose(file);
+			write(httpsockfd, header404, strlen(header404));
+			file = fopen("404.html", "r");
+		}
+		free(path);
+	} else { //not a GET request
+		write(httpsockfd, header400, strlen(header400));
+		file = fopen("400.html", "r");
+	}
+
+	//send file
+	*c = fgetc(file);
+	printf("c = %c\n", *c);
+	while (*c != EOF) {
+		printf("%c", *c);
+		fflush(stdout);
+		write(httpsockfd, c, 1);
+		*c = fgetc(file);
+	}
+	fclose(file);
+	
   return 0;
 }
 
