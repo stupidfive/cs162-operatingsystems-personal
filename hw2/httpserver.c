@@ -79,7 +79,6 @@ int process_http_request(int httpsockfd)
 		if (file) { //file exists
 			write(httpsockfd, htmlheader, strlen(htmlheader));
 		} else { //file doesn't exist
-			fclose(file);
 			write(httpsockfd, header404, strlen(header404));
 			file = fopen("404.html", "r");
 		}
