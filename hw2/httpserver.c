@@ -40,7 +40,6 @@ const char header400[]="HTTP/1.0 400 Bad Request\r\n"
 
 int process_http_request(int httpsockfd)
 {
-	printf("process_http_request\n");
   char reqbuf[MAXREQ];
   int n=0;
   /* IMPLEMENT ME!
@@ -92,10 +91,7 @@ int process_http_request(int httpsockfd)
 
 	//send file
 	*c = fgetc(file);
-	printf("c = %c\n", *c);
 	while (*c != EOF) {
-		printf("%c", *c);
-		fflush(stdout);
 		write(httpsockfd, c, 1);
 		*c = fgetc(file);
 	}
