@@ -150,7 +150,22 @@ void page_fault(uint32_t page) {
 
   // page fault handler goes here - about 10 lines
   // 
-
+	uint32_t frame;
+	frame = get_frame();
+	int i;
+	for (i = 0; i < PT_SIZE; i++) {
+		if (pagetable[i].frame == frame) {
+			
+			if (pte_isdirty(i)) {
+				dump_page(i, pagetable[i].frame);
+				pte_clean(i);
+				pte_invalid(i);
+			}
+			break;
+		}
+	}
+	pte_fresh(page, frame);
+	print_frames();
   //  print_pagetable();
 }
 
