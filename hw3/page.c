@@ -109,6 +109,17 @@ int get_frame() {
 
  */
   // CLOCK ALGORITHM GOES HERE - about 10 lines long
+	int frame;
+	while (1) {
+		if (pagetable[resident_page[next_frame]].accessed) {
+			pagetable[resident_page[next_frame]].accessed = false;
+		} else {
+			frame = next_frame;
+			next_frame = (next_frame + 1) % MT_SIZE;
+			return frame;
+		}
+		next_frame = (next_frame + 1) % MT_SIZE;
+	}
   return -1;
 }
 
@@ -152,20 +163,14 @@ void page_fault(uint32_t page) {
   // 
 	uint32_t frame;
 	frame = get_frame();
-	int i;
-	for (i = 0; i < PT_SIZE; i++) {
-		if (pagetable[i].frame == frame) {
-			
-			if (pte_isdirty(i)) {
-				dump_page(i, pagetable[i].frame);
-				pte_clean(i);
-				pte_invalid(i);
-			}
-			break;
-		}
+	if (resident_page[frame] != -1 && pagetable[resident_page[frame]].valid) {
+		evict_page(resident_page[frame], frame);
+		pte_invalid(resident_page[frame]);
+		pte_clean(resident_page[frame]);
+		pte_invalid(resident_page[frame]);
 	}
-	pte_fresh(page, frame);
-	print_frames();
+	load_page(page, frame);
+	resident_page[frame] = page;
   //  print_pagetable();
 }
 

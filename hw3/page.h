@@ -15,7 +15,7 @@ typedef enum access_type {READ=0,  WRITE=2,  FETCH=1} access_t;
 uint32_t extract_tag(uint32_t addr);
 uint32_t extract_offset(uint32_t addr);
 
-//#define BITS
+#define BITS
 typedef struct pte {
 #ifndef BITS
   bool valid;
@@ -24,6 +24,10 @@ typedef struct pte {
   uint32_t frame;
 #else
   //BIT PACKED VERSION GOES HERE - only a few chars different from above
+	bool valid: 1;
+	bool accessed: 1;
+	bool dirty: 1;
+	uint32_t frame: 20;
 #endif
 } pte_t;
 
