@@ -8,7 +8,7 @@ int main(int argc, char **argv)
 
     data = (int*) mm_malloc(4);
     data[0] = 1;
-    free(data);
+    mm_free(data);
     printf("malloc sanity test successful!\n");
     return 0;
 }
