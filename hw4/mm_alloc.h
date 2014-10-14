@@ -30,7 +30,7 @@ struct s_block {
     int free;
     void *ptr;
     /* A pointer to the allocated block */
-    char data [1];
+    char data [0];
  };
 
 /* Split block according to size, b must exist */
