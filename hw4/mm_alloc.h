@@ -7,7 +7,7 @@
 #pragma once
 
  /* Define the block size since the sizeof will be wrong */
-#define BLOCK_SIZE 20
+#define BLOCK_SIZE 40
 
 #ifdef __cplusplus
 extern "C" {
