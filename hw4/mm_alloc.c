@@ -54,6 +54,9 @@ void* mm_malloc(size_t size)
 			}
 			mem_block = mem_block->next;
 		}
+		if (free_mem == 0) {
+			free_mem = sbrk(sizeof(mem));
+		}
 	}
 	while (free_mem->next != 0) {
 		if (free_mem->size = size) {
