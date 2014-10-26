@@ -32,21 +32,37 @@ void insert_after(mem_ptr elem, mem_ptr list) {
 }
 struct mem free_list = {0}; //beginning of list of free memory
 struct mem used_list = {0}; //end of list of used memory
+void *free_mem = 0;
 
 void* mm_malloc(size_t size)
 {
 #ifdef MM_USE_STUBS
 	return calloc(1, size);
 #else
-	struct mem *new_mem = malloc(sizeof(mem));
+	
+	struct mem *new_mem;// = malloc(sizeof(mem));
 	struct mem *free_mem = free_list;
 	struct mem *used_mem = used_list;
+	struct mem *mem_block = free_list;
+	void *new_mem;
+	if (free_mem == 0) {
+		while (mem_block->next != 0) {
+			if (mem_block->size >= sizeof(mem)) {
+				mem_block->size -= sizeof(mem);
+				free_mem = mem_block
+				break;
+			}
+			mem_block = mem_block->next;
+		}
+	}
 	while (free_mem->next != 0) {
 		if (free_mem->size = size) {
 			free_mem->prev->next = free_mem->next;
 			insert_before(free_mem, used_mem);
 			return free_mem->pointer;
 		} else if (free_mem->size > size) {
+			new_mem = free_mem;
+			free_mem = 0;
 			new_mem->pointer = free_mem->pointer;
 			new_mem->size = size;
 			insert_before(new_mem, used_mem);
@@ -55,6 +71,8 @@ void* mm_malloc(size_t size)
 			return new_mem->pointer;
 		}
 	}
+	new_mem = free_mem;
+	free_mem = 0;
 	new_mem->pointer = sbrk(size);
 	new_mem->size = size;
 	insert_before(new_mem, used_mem);
