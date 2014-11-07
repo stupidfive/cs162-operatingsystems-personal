@@ -46,6 +46,16 @@ const char textheader[]="HTTP/1.0 200 OK\r\n"
   "Content-Type: text/plain\r\n"
   "\r\n";
 
+const char header404[]="HTTP/1.0 404 Not Found\r\n"
+  "Content-Type: text/html\r\n"
+  "\r\n";
+
+const char header400[]="HTTP/1.0 400 Bad Request\r\n"
+  "Content-Type: text/html\r\n"
+  "\r\n";
+
+struct stat st;
+
 int process_http_request(int httpsockfd)
 {
   char reqbuf[MAXREQ];
@@ -53,13 +63,52 @@ int process_http_request(int httpsockfd)
   /* Note this is same as the HW2 skeleton.
    * Replace this with your HW2 implementation
    * */
+
   memset(reqbuf,0, MAXREQ);
   n = read(httpsockfd,reqbuf,MAXREQ-1);
-  write(httpsockfd,textheader,strlen(textheader));
-  write(httpsockfd,"You said:\n",10);
-  write(STDOUT_FILENO, reqbuf, n );
-  write(httpsockfd, reqbuf, n );
-  return 0;
+  char * p;
+  p = strtok(reqbuf, " ");
+  char *path;
+  char *c = (char *) malloc(sizeof(char));;
+  FILE *file;
+  int comp = 1;
+  comp = strcmp(p, "GET");
+  if (!comp) { //is this a GET request
+    p = strtok(NULL, " ");
+    path = (char *) malloc(strlen(p) + 3);
+    sprintf(path, "%s%s", "www", p);
+    file = fopen(path, "r");
+    if (file) { //file exists
+			fstat(fileno(file), &st);
+			if (S_ISREG(st.st_mode)) {
+				write(httpsockfd, htmlheader, strlen(htmlheader));
+			} else if (S_ISDIR(st.st_mode)) {
+				char *index_path = (char *) malloc(strlen(path) + 11);
+				sprintf(index_path, "%s%s", path, "/index.html"); //still need to check last symbol
+				file = fopen(index_path, "r");
+				if (!file) {
+					//build directory
+				}
+				write(httpsockfd, htmlheader, strlen(htmlheader));
+    } else { //file doesn't exist
+      write(httpsockfd, header404, strlen(header404));
+      file = fopen("404.html", "r");
+    }
+    free(path);
+  } else { //not a GET request
+    write(httpsockfd, header400, strlen(header400));
+    file = fopen("400.html", "r");
+  }
+
+  //send file
+  *c = fgetc(file);
+  while (*c != EOF) {
+    write(httpsockfd, c, 1);
+    *c = fgetc(file);
+  }
+	fclose(file);
+
+	return 0;
 }
 
 int sockfd, newsockfd;    /* make static so signal handler can close */
