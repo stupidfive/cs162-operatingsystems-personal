@@ -72,22 +72,22 @@ char * build_directory(char *path) {
 	struct dirent *ent;
 	if ((dir = opendir(path))) {
 		printf("dir = opendir(path)\n");
-		sprintf(dir_view, dir_listing_head, path, path);
+		sprintf(dir_view, dir_listing_head, path+3, path+3);
 		printf("after sprintf\n");
 		while ((ent = readdir(dir))) {
 			printf("reading dir\n");
 			sprintf(subdir, "%s/%s", path, ent->d_name);
 			stat(subdir, &st);
-			//if (S_ISREG(st.st_mode)) {
-			if (ent->d_type == DT_REG) {
-				printf("regular file\n");
-				sprintf(entry, dir_file_entry, ent->d_name);
-			//} else if (S_ISDIR(st.st_mode)) {
-			} else if (ent->d_type == DT_DIR) {
-				printf("dir\n");
-				sprintf(entry, dir_dir_entry, ent->d_name);
+			if (st.st_mode & S_IROTH) {
+				if (ent->d_type == DT_REG) {
+					printf("regular file\n");
+					sprintf(entry, dir_file_entry, ent->d_name);
+				} else if (ent->d_type == DT_DIR) {
+					printf("dir\n");
+					sprintf(entry, dir_dir_entry, ent->d_name);
+				}
+				sprintf(dir_view, "%s%s", dir_view, entry);
 			}
-			sprintf(dir_view, "%s%s", dir_view, entry);
 		}
 		sprintf(dir_view, "%s%s", dir_view, dir_listing_end);
 		closedir(dir);
@@ -128,6 +128,7 @@ int process_http_request(int httpsockfd)
 		char *real_path;
 		printf("setup done\n");
 		real_path = realpath(path, NULL);
+		if (real_path) {
 		real_path[strlen(www_root)] = 0;
 		if (strcmp(real_path, www_root)) { //not in the right root directory
 			printf("not in the right root directory\n");
@@ -154,7 +155,6 @@ int process_http_request(int httpsockfd)
 						if (!file) { //if no file exists
 							printf("no file exists\n");
 							dir_view = build_directory(path);
-							
 							printf("finished asprintf call\n");
 						}
 						write(httpsockfd, htmlheader, strlen(htmlheader));
@@ -173,6 +173,11 @@ int process_http_request(int httpsockfd)
 			free(path);
 		}
 		free(real_path);
+		} else { //file does not exist
+			printf("file doesn't exist\n");
+			write(httpsockfd, header404, strlen(header404));
+			file = fopen("404.html", "r");
+		}	
 	} else { //not a GET request
 		printf("not a GET request\n");
 		write(httpsockfd, header400, strlen(header400));
