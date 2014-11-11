@@ -116,40 +116,41 @@ int process_http_request(int httpsockfd)
 		char *real_path;
 		real_path = realpath(path, NULL);
 		if (real_path) {
-		real_path[strlen(www_root)] = 0;
-		if (strcmp(real_path, www_root)) { //not in the right root directory
-			write(httpsockfd, header403, strlen(header403));
-			file = fopen("403.html", "r");
-		} else { //in the root directory
-			file = fopen(path, "r");
-			if (file) { //file exists
-				//fstat(fileno(file), &st);
-				lstat(path, &st);
-				if (st.st_mode & S_IROTH) { //file has read permissions
-					if (S_ISREG(st.st_mode)) { //is a regular file
-						write(httpsockfd, htmlheader, strlen(htmlheader));
-					} else if (S_ISDIR(st.st_mode)) { //is a dir
-						char *index_path = (char *) malloc(strlen(path) + 11);
-						sprintf(index_path, "%s%s", path, "/index.html"); //still need to check last symbol
-						fclose(file);
-						file = fopen(index_path, "r");
-						if (!file) { //if no file exists
-							dir_view = build_directory(path);
+			real_path[strlen(www_root)] = 0;
+			printf("%s vs %s\n", real_path, www_root);
+			if (strcmp(real_path, www_root)) { //not in the right root directory
+				printf("not in the right root directory\n");
+				write(httpsockfd, header403, strlen(header403));
+				file = fopen("403.html", "r");
+			} else { //in the root directory
+				file = fopen(path, "r");
+				if (file) { //file exists
+					lstat(path, &st);
+					if (st.st_mode & S_IROTH) { //file has read permissions
+						if (S_ISREG(st.st_mode)) { //is a regular file
+							write(httpsockfd, htmlheader, strlen(htmlheader));
+						} else if (S_ISDIR(st.st_mode)) { //is a dir
+							char *index_path = (char *) malloc(strlen(path) + 11);
+							sprintf(index_path, "%s%s", path, "/index.html"); //still need to check last symbol
+							fclose(file);
+							file = fopen(index_path, "r");
+							if (!file) { //if no file exists
+								dir_view = build_directory(path);
+							}
+							write(httpsockfd, htmlheader, strlen(htmlheader));
 						}
-						write(httpsockfd, htmlheader, strlen(htmlheader));
+					} else { //no read permissions
+						write(httpsockfd, header403, strlen(header403));
+						fclose(file);
+						file = fopen("403.html", "r");
 					}
-				} else { //no read permissions
-					write(httpsockfd, header403, strlen(header403));
-					fclose(file);
-					file = fopen("403.html", "r");
+				} else { //file doesn't exist
+					write(httpsockfd, header404, strlen(header404));
+					file = fopen("404.html", "r");
 				}
-			} else { //file doesn't exist
-				write(httpsockfd, header404, strlen(header404));
-				file = fopen("404.html", "r");
+				free(path);
 			}
-			free(path);
-		}
-		free(real_path);
+			free(real_path);
 		} else { //file does not exist
 			write(httpsockfd, header404, strlen(header404));
 			file = fopen("404.html", "r");
