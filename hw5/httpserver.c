@@ -63,25 +63,33 @@ const char header403[]="HTTP/1.0 403 Forbidden\r\n"
 struct stat st;
 
 char * build_directory(char *path) {
+	printf("building directory for: %s\n", path);
 	struct stat st;
-	char *dir_view;
-	char *subdir;
-	char *entry;
+	char *dir_view = (char *) malloc(MAXBUF);
+	char *subdir = (char *) malloc(MAXBUF);
+	char *entry = (char *) malloc(MAXBUF);
 	DIR *dir;
 	struct dirent *ent;
 	if ((dir = opendir(path))) {
-		asprintf(dir_view, dir_listing_head, path);
+		printf("dir = opendir(path)\n");
+		sprintf(dir_view, dir_listing_head, path, path);
+		printf("after sprintf\n");
 		while ((ent = readdir(dir))) {
-			asprintf(subdir, "%s/%s", path, ent->d_name);
+			printf("reading dir\n");
+			sprintf(subdir, "%s/%s", path, ent->d_name);
 			stat(subdir, &st);
-			if (S_ISREG(st.st_mode)) {
-				asprintf(entry, dir_file_entry, ent->d_name);
-			} else if (S_ISDIR(st.st_mode)) {
-				asprintf(entry, dir_dir_entry, ent->d_name);
+			//if (S_ISREG(st.st_mode)) {
+			if (ent->d_type == DT_REG) {
+				printf("regular file\n");
+				sprintf(entry, dir_file_entry, ent->d_name);
+			//} else if (S_ISDIR(st.st_mode)) {
+			} else if (ent->d_type == DT_DIR) {
+				printf("dir\n");
+				sprintf(entry, dir_dir_entry, ent->d_name);
 			}
-			asprintf(dir_view, "%s%s", dir_view, entry);
+			sprintf(dir_view, "%s%s", dir_view, entry);
 		}
-		asprintf(dir_view, "%s%s", dir_view, dir_listing_end);
+		sprintf(dir_view, "%s%s", dir_view, dir_listing_end);
 		closedir(dir);
 	}
 	return dir_view;
@@ -112,8 +120,7 @@ int process_http_request(int httpsockfd)
 		path = (char *) malloc(strlen(p) + 3);
 		sprintf(path, "%s%s", "www", p);
 		printf("path %s made\n", path);
-		char *pwd;
-		pwd = get_current_dir_name();
+		char *pwd = (char *) get_current_dir_name();
 		printf("pwd is %s\n", pwd);
 		char *www_root = (char *) malloc(strlen(pwd) + 4);
 		sprintf(www_root, "%s%s", pwd, "/www");
@@ -131,7 +138,8 @@ int process_http_request(int httpsockfd)
 			file = fopen(path, "r");
 			if (file) { //file exists
 				printf("file exists\n");
-				fstat(fileno(file), &st);
+				//fstat(fileno(file), &st);
+				lstat(path, &st);
 				if (st.st_mode & S_IROTH) { //file has read permissions
 					printf("file has read permissions\n");
 					if (S_ISREG(st.st_mode)) { //is a regular file
@@ -145,7 +153,9 @@ int process_http_request(int httpsockfd)
 						file = fopen(index_path, "r");
 						if (!file) { //if no file exists
 							printf("no file exists\n");
-							asprintf(dir_view, build_directory(path));
+							dir_view = build_directory(path);
+							
+							printf("finished asprintf call\n");
 						}
 						write(httpsockfd, htmlheader, strlen(htmlheader));
 					}
@@ -171,8 +181,10 @@ int process_http_request(int httpsockfd)
 
 	//send file
 	if (dir_view) {
+		printf("writing dir_view\n");
 		write(httpsockfd, dir_view, strlen(dir_view));
 	} else {
+		printf("writing file\n");
 		*c = fgetc(file);
 		while (*c != EOF) {
 			write(httpsockfd, c, 1);
