@@ -118,9 +118,7 @@ int process_http_request(int httpsockfd)
 		real_path = realpath(path, NULL);
 		if (real_path) {
 			real_path[strlen(www_root)] = 0;
-			printf("%s vs %s\n", real_path, www_root);
 			if (strcmp(real_path, www_root)) { //not in the right root directory
-				printf("not in the right root directory\n");
 				write(httpsockfd, header403, strlen(header403));
 				file = fopen("403.html", "r");
 			} else { //in the root directory
