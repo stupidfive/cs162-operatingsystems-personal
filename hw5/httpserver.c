@@ -113,6 +113,7 @@ int process_http_request(int httpsockfd)
 		sprintf(path, "%s%s", "www", p);
 		char *pwd = (char *) get_current_dir_name();
 		char *www_root = (char *) malloc(strlen(pwd) + 4);
+		sprintf(www_root, "%s%s", pwd, "/www");
 		char *real_path;
 		real_path = realpath(path, NULL);
 		if (real_path) {
