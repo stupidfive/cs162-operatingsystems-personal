@@ -63,7 +63,6 @@ const char header403[]="HTTP/1.0 403 Forbidden\r\n"
 struct stat st;
 
 char * build_directory(char *path) {
-	printf("building directory for: %s\n", path);
 	struct stat st;
 	char *dir_view = (char *) malloc(MAXBUF);
 	char *subdir = (char *) malloc(MAXBUF);
@@ -71,19 +70,14 @@ char * build_directory(char *path) {
 	DIR *dir;
 	struct dirent *ent;
 	if ((dir = opendir(path))) {
-		printf("dir = opendir(path)\n");
 		sprintf(dir_view, dir_listing_head, path+3, path+3);
-		printf("after sprintf\n");
 		while ((ent = readdir(dir))) {
-			printf("reading dir\n");
 			sprintf(subdir, "%s/%s", path, ent->d_name);
 			stat(subdir, &st);
 			if (st.st_mode & S_IROTH) {
 				if (ent->d_type == DT_REG) {
-					printf("regular file\n");
 					sprintf(entry, dir_file_entry, ent->d_name);
 				} else if (ent->d_type == DT_DIR) {
-					printf("dir\n");
 					sprintf(entry, dir_dir_entry, ent->d_name);
 				}
 				sprintf(dir_view, "%s%s", dir_view, entry);
@@ -103,7 +97,6 @@ int process_http_request(int httpsockfd)
 	 * Replace this with your HW2 implementation
 	 * */
 
-	printf("process_http_request\n");
 	memset(reqbuf,0, MAXREQ);
 	n = read(httpsockfd,reqbuf,MAXREQ-1);
 	char * p;
@@ -115,58 +108,42 @@ int process_http_request(int httpsockfd)
 	int comp = 1;
 	comp = strcmp(p, "GET");
 	if (!comp) { //is this a GET request
-		printf("GET request\n");
 		p = strtok(NULL, " ");
 		path = (char *) malloc(strlen(p) + 3);
 		sprintf(path, "%s%s", "www", p);
-		printf("path %s made\n", path);
 		char *pwd = (char *) get_current_dir_name();
-		printf("pwd is %s\n", pwd);
 		char *www_root = (char *) malloc(strlen(pwd) + 4);
-		sprintf(www_root, "%s%s", pwd, "/www");
-		printf("www_root is %s\n", www_root);
 		char *real_path;
-		printf("setup done\n");
 		real_path = realpath(path, NULL);
 		if (real_path) {
 		real_path[strlen(www_root)] = 0;
 		if (strcmp(real_path, www_root)) { //not in the right root directory
-			printf("not in the right root directory\n");
 			write(httpsockfd, header403, strlen(header403));
 			file = fopen("403.html", "r");
 		} else { //in the root directory
-			printf("in the root directory\n");
 			file = fopen(path, "r");
 			if (file) { //file exists
-				printf("file exists\n");
 				//fstat(fileno(file), &st);
 				lstat(path, &st);
 				if (st.st_mode & S_IROTH) { //file has read permissions
-					printf("file has read permissions\n");
 					if (S_ISREG(st.st_mode)) { //is a regular file
-						printf("is a regular file\n");
 						write(httpsockfd, htmlheader, strlen(htmlheader));
 					} else if (S_ISDIR(st.st_mode)) { //is a dir
-						printf("is a dir\n");
 						char *index_path = (char *) malloc(strlen(path) + 11);
 						sprintf(index_path, "%s%s", path, "/index.html"); //still need to check last symbol
 						fclose(file);
 						file = fopen(index_path, "r");
 						if (!file) { //if no file exists
-							printf("no file exists\n");
 							dir_view = build_directory(path);
-							printf("finished asprintf call\n");
 						}
 						write(httpsockfd, htmlheader, strlen(htmlheader));
 					}
 				} else { //no read permissions
-					printf("no read permissions\n");
 					write(httpsockfd, header403, strlen(header403));
 					fclose(file);
 					file = fopen("403.html", "r");
 				}
 			} else { //file doesn't exist
-				printf("file doesn't exist\n");
 				write(httpsockfd, header404, strlen(header404));
 				file = fopen("404.html", "r");
 			}
@@ -174,22 +151,18 @@ int process_http_request(int httpsockfd)
 		}
 		free(real_path);
 		} else { //file does not exist
-			printf("file doesn't exist\n");
 			write(httpsockfd, header404, strlen(header404));
 			file = fopen("404.html", "r");
 		}	
 	} else { //not a GET request
-		printf("not a GET request\n");
 		write(httpsockfd, header400, strlen(header400));
 		file = fopen("400.html", "r");
 	}
 
 	//send file
 	if (dir_view) {
-		printf("writing dir_view\n");
 		write(httpsockfd, dir_view, strlen(dir_view));
 	} else {
-		printf("writing file\n");
 		*c = fgetc(file);
 		while (*c != EOF) {
 			write(httpsockfd, c, 1);
